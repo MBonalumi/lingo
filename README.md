@@ -1,6 +1,6 @@
 # Lingo
 
-In this repo, I apply data science tecniques, such as entropy minimization, to analyze the Zingarelli italian vocabulary (see [here](https://github.com/pazqo/scalaWords/)).
+In this repo, I apply data science tecniques, such as entropy minimization, to analyze the Zingarelli italian vocabulary (see [here](https://github.com/pazqo/scalaWords/) or [here](https://github.com/napolux/paroleitaliane)).
 
 The goal is to assess an optimal strategy to pursue in the popular italian tv show "Lingo".
 
