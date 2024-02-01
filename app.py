@@ -2,8 +2,20 @@ import tkinter as tk
 
 # dataset
 
-def pick_word():
-    return "moneta".upper()
+def define_dataset():
+    global dataset
+    dataset = pd.read_csv("vocabolari/words6.csv")
+
+def reset_true_word(new_true_word=None):
+    if new_true_word is None:
+        new_true_word = dataset.sample(1).iloc[0,0].upper()
+    else:
+        new_true_word = new_true_word.upper()
+    
+    global true_word
+    true_word = new_true_word
+    print("true:", true_word)
+    return true_word
 
 def score(word):
     score = [0]*len(word)
@@ -23,8 +35,12 @@ def score(word):
 
     return score
 
-def on_submit():
-    input_text = str(entry.get()).upper()
+def on_submit(word=None):
+    if word is None:
+        input_text = str(entry.get()).upper()
+    else:
+        input_text = word.upper()
+    
     print(f"Submitted: {input_text}")
     entry.delete(0, tk.END)
     #controlla l'input
@@ -41,7 +57,7 @@ def on_submit():
     if input_text not in dataset.values:
         info_text.set("La parola non è valida! la risposta era " + true_word)
         write(input_text, [3]*num_squares)
-        end_state()
+        # end_state()
         return
 
     wscore = score(input_text)
@@ -76,8 +92,11 @@ def on_submit():
     display_word = new_display_word
     write(display_word, score(display_word))
 
+    return wscore
+
 def write(text, wscore):
-    background_colors = ["#1156f1", "#f4af0f", "#01c02e", "#fa3a4a"]    # blue, yellow, green, red
+    # background_colors = ["#1156f1", "#f4af0f", "#01c02e", "#fa3a4a"]    # blue, yellow, green, red -> Lingo
+    background_colors = ["#787c7e", "#f4af0f", "#01c02e", "#fa3a4a"]    # wordle_gray, yellow, green, red
     for i, char in enumerate(text):
         square_text = tk.Label( root, text=char, font=("Arial", 16, 'bold'),
                                 fg="white", bg=background_colors[wscore[i]], width=4, height=2,
@@ -91,7 +110,9 @@ def end_state():
     reset_button.config(state="normal")
     root.bind('<r>', lambda event: reset())  # Bind Return key event to submit button
 
-def reset():
+def reset(new_true_word=None):
+    reset_true_word(new_true_word)
+
     reset_button.config(state="disabled")
     root.unbind('<r>')
 
@@ -111,17 +132,20 @@ def reset():
     info_text.set(f"Inserisci una parola di {num_squares} lettere" )
     root.bind('<Return>', lambda event: on_submit())  # Bind Return key event to submit button
 
-    true_word = dataset.sample(1).iloc[0,0].upper()
-    print("true:", true_word)
-
     display_word = true_word[0] + " "*(num_squares-1)
     print(display_word)
     write(display_word, score(display_word))
+
+    return true_word[0]
 
 def main():
     global root, entry, info_text, submit_button, reset_button,\
             horizontal_center, square_width, num_squares, incremental_y,\
             tries, max_tries, display_word
+    
+    define_dataset()
+
+    reset_true_word()
 
     root = tk.Tk()
     root.title("Lingo")
@@ -181,8 +205,7 @@ def main():
 
 import pandas as pd
 if __name__ == "__main__":
-    global true_word, dataset
-    dataset = pd.read_csv("vocabolari/words6.csv")
-    true_word = dataset.sample(1).iloc[0,0].upper()
-    print("true:", true_word)
+    # global dataset
+    # dataset = pd.read_csv("vocabolari/words6.csv")
+    # true_word = dataset.sample(1).iloc[0,0].upper()
     main()

@@ -1,13 +1,23 @@
 import pandas as pd
 import numpy as np
+import sys
 
+args = sys.argv[1:]
+print(args)
+LEN = args[0]
+assert LEN in ['4', '5', '6', '7', '8', '9', '10', '11']
+LEN = int(LEN)
 
-words = pd.read_csv('vocabolari/words6.csv', header=None, names=['word'])
+words = pd.read_csv(f'vocabolari/words{LEN}.csv', header=None, names=['word'])
 # words.head()
 
+
+#build dictionary of scores.
+#Translate between lists of [0,1,2] of length LEN and integers from 0 to 2^LEN -1
 import itertools
-combinations = list(itertools.product([0, 1, 2], repeat=6))
+combinations = list(itertools.product([0, 1, 2], repeat=LEN))
 conversion_dict = {combination: index for index, combination in enumerate(combinations)}
+
 
 def score(guess, true_word, return_list=False):
     assert len(guess) == len(true_word), 'Guess and true word must have the same length'
@@ -39,11 +49,11 @@ scores = np.zeros((len(words), len(words)), dtype=list)
 from tqdm import tqdm
 
 for i in tqdm(range(len(words))):
-    scores[i,i] = score(words.word[i], words.word[i], return_list=True)
+    scores[i,i] = score(words.word[i], words.word[i])
     for j in range(i+1, len(words)):
-        scores[i,j] = score(words.word[i], words.word[j], return_list=True)
-        scores[j,i] = score(words.word[j], words.word[i], return_list=True)
+        scores[i,j] = score(words.word[i], words.word[j])
+        scores[j,i] = score(words.word[j], words.word[i])
 
 
 #save the matrix
-np.save('var/scores6.npy', scores)
+np.save(f'var/scores{LEN}.npy', scores)
