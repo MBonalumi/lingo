@@ -2,3 +2,4 @@
 *.npy
 var
 utils
+__pycache__
