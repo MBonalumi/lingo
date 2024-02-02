@@ -11,9 +11,10 @@ def compute_entropy(words, candidate_answers, scores_matrix):
     entropies = []
 
     for i_guess in indices:
-        i_scores = []
-        for i_ans in indices_ans:
-            i_scores.append(scores_matrix[i_guess, i_ans])
+        # i_scores = []
+        # for i_ans in indices_ans:
+        #     i_scores.append(scores_matrix[i_guess, i_ans])
+        i_scores = scores_matrix[i_guess, indices_ans]
 
         # i_scores_counts = pd.DataFrame(i_scores).value_counts()
         # i_scores_idx =  i_scores_counts.index.map(lambda x: x[0]).to_numpy()
