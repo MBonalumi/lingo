@@ -9,6 +9,8 @@ partecipants are presented with an unknown word of length 5 to 15, and given the
 they must guess the correct word.
 When a word is submitted, correct letters will be highlighted in green if they stand in the correct position, and in yellow if they are misplaced.
 
+---
+
 ### Contributions
 
 See [ScalaWords](https://github.com/pazqo/scalaWords/) for the zingarelli huge dataset.  
